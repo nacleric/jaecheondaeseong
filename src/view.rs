@@ -8,11 +8,31 @@ use crate::{
     consts::{HEIGHT, WIDTH},
     interfaces::{TtyControl, View, ViewBuffer},
 };
-use std::io::{stdout, Stdout, Write};
+use std::io::{stdin, stdout, Stdin, Stdout, Write};
 
-// TODO: Will have to be changed
+#[derive(Clone, Debug)]
 pub struct TerminalBuffer {
-    data: [[Option<char>; WIDTH]; HEIGHT],
+    cells: Vec<Vec<Option<char>>>, // TODO: Might need to be generic?
+    width: usize,
+    height: usize,
+}
+
+impl TerminalBuffer {
+    pub fn new() -> Self {
+        Self {
+            cells: vec![vec![None]],
+            width: WIDTH, // TODO: width and height will need to be dynamic, placeholders for now
+            height: HEIGHT,
+        }
+    }
+
+    fn get_data(&self) -> &Vec<Vec<Option<char>>> {
+        &self.cells
+    }
+
+    fn set_data(&mut self, cells: Vec<Vec<Option<char>>>) {
+        self.cells = cells;
+    }
 }
 
 impl ViewBuffer for TerminalBuffer {
@@ -24,7 +44,7 @@ impl ViewBuffer for TerminalBuffer {
 pub struct Terminal<VB, TC: TtyControl> {
     view_buffer: VB,
     tty_control: TC,
-    // input:
+    input: Stdin,
     output: Stdout,
 }
 
@@ -33,10 +53,12 @@ where
     VB: ViewBuffer + Clone,
 {
     pub fn new(view: VB, tty_control: TC) -> Self {
+        let stdin = stdin();
         let stdout = stdout();
         Self {
             view_buffer: view,
             tty_control,
+            input: stdin,
             output: stdout,
         }
     }
@@ -47,15 +69,24 @@ where
 }
 
 // TODO: ask Brad to review this
-impl<B: ViewBuffer, TC: TtyControl> View for Terminal<B, TC> {
-    fn clear(&mut self) -> Result<(), std::io::Error>{
+impl<VB: ViewBuffer, TC: TtyControl> View for Terminal<VB, TC>
+where
+    VB: ViewBuffer + Clone,
+{
+    fn clear(&mut self) -> Result<(), std::io::Error> {
         match write!(self.output, "{}", termion::clear::All) {
             Ok(_) => self.output.flush(),
             Err(e) => panic!("Problem writing to screen: {:?}", e),
         }
     }
 
-    fn print(&mut self) {
-        unimplemented!();
+    fn print_to_screen(&mut self, grapheme: char) {
+        // self.write_to_buffer(grapheme);
+        write!(self.output, "{}", grapheme).expect("words on screen");
+    }
+
+    // TODO: Bring out Cursor Position
+    fn write_to_buffer(&mut self, graphemes: char) {
+        let mut view_buffer = self.view_buffer();
     }
 }

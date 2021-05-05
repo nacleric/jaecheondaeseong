@@ -12,18 +12,36 @@ fn new__clears_entire_view() {
     let mut sut = Terminal::new(mock_view, TtyControlDummyAdapter::new());
 
     // When
-    sut.clear();
+    sut.clear().unwrap();
+
+    // Then
+    assert_eq!(sut.view_buffer().get_data(), expected_view_state);
+}
+
+#[test]
+fn write_to_buffer__writes_grapheme_into_viewbuffer() {
+    // Given
+    let expected_view_state: [[Option<char>; WIDTH]; HEIGHT] = [[Some('a'); WIDTH]; HEIGHT];
+    let mock_view = MockTerminalView::new();
+    let mut sut = Terminal::new(mock_view, TtyControlDummyAdapter::new());
+
+    // When
+    sut.write_to_buffer('a');
 
     // Then
     assert_eq!(sut.view_buffer().get_data(), expected_view_state);
 }
 
 // #[test]
-// fn print__renders_graphemes_to_mockview() {
+// fn print_to_screen__renders_graphemes_to_mockview() {
 //     // Given
-//     let expected_view_state = [[Some(' '); WIDTH]; HEIGHT];
+//     let expected_view_state: [[Option<char>; WIDTH]; HEIGHT] = [[Some('a'); WIDTH]; HEIGHT];
+//     let mock_view = MockTerminalView::new();
+//     let mut sut = Terminal::new(mock_view, TtyControlDummyAdapter::new());
 
 //     // When
-//     sut.print();
+//     sut.print_to_screen('a');
+
 //     // Then
+//     assert_eq!(sut.view_buffer().get_data(), expected_view_state);
 // }

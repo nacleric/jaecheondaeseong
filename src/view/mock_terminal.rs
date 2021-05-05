@@ -5,22 +5,22 @@ use crate::{
 
 #[derive(Clone, Debug, PartialEq)]
 pub struct MockTerminalView {
-    data: [[Option<char>; WIDTH]; HEIGHT],
+    cells: [[Option<char>; WIDTH]; HEIGHT], // TODO: Might need to be generic?
 }
 
 impl MockTerminalView {
     pub fn new() -> Self {
         Self {
-            data: [[None; WIDTH]; HEIGHT],
+            cells: [[None; WIDTH]; HEIGHT],
         }
     }
 
     pub fn get_data(&self) -> [[Option<char>; WIDTH]; HEIGHT] {
-        self.data
+        self.cells
     }
 
-    pub fn set_data(&mut self, data: [[Option<char>; WIDTH]; HEIGHT]) {
-        self.data = data;
+    pub fn set_data(&mut self, cells: [[Option<char>; WIDTH]; HEIGHT]) {
+        self.cells = cells;
     }
 }
 
