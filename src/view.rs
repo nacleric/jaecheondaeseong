@@ -35,9 +35,15 @@ impl TerminalBuffer {
     }
 }
 
+// Responsible for ANSI control
 impl ViewBuffer for TerminalBuffer {
     fn clear(&mut self) {
         unimplemented!()
+    }
+
+    // TODO: Bring out Cursor Position
+    fn write(&mut self, graphemes: &[char]) {
+        let mut view_buffer = self.view_buffer();
     }
 }
 
@@ -83,10 +89,5 @@ where
     fn print_to_screen(&mut self, grapheme: char) {
         // self.write_to_buffer(grapheme);
         write!(self.output, "{}", grapheme).expect("words on screen");
-    }
-
-    // TODO: Bring out Cursor Position
-    fn write_to_buffer(&mut self, graphemes: char) {
-        let mut view_buffer = self.view_buffer();
     }
 }
