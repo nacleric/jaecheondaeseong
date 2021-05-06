@@ -1,16 +1,17 @@
 pub use error::{Error, Result};
 
 use crate::{
-    interfaces::View,
-    view::{termion_adapter::TermionAdapter, Terminal, TerminalBuffer},
+    traits::View,
+    terminal::{termion_adapter::TermionAdapter, Terminal, TerminalBuffer},
 };
 
+mod adapters;
 mod consts;
 mod error;
 mod model;
-mod view;
+mod terminal;
 
-pub mod interfaces;
+pub mod traits;
 
 // New
 fn main() -> Result<(), std::io::Error> {

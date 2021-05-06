@@ -1,4 +1,4 @@
-pub trait RowBuffer {
+pub trait Buffer {
     type Row;
 
     fn append_row(&mut self) -> &mut Self {

@@ -1,6 +1,6 @@
 use crate::{
     consts::{HEIGHT, WIDTH},
-    interfaces::ViewBuffer,
+    traits::ViewBuffer,
 };
 
 #[derive(Clone, Debug, PartialEq)]

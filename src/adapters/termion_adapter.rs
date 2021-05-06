@@ -1,4 +1,4 @@
-use crate::interfaces::TtyControl;
+use crate::traits::TtyControl;
 
 #[derive(Debug, Default)]
 pub struct TermionAdapter {}

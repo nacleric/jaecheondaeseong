@@ -1,7 +1,7 @@
 use std::cmp::min;
 
 use crate::{
-    interfaces::RowBuffer,
+    traits::Buffer,
     model::{
         utf8_buffer::{
             direction::Direction,
@@ -15,8 +15,8 @@ use crate::model::cursor_position::CursorPosition;
 mod unit_tests;
 
 #[derive(Debug, Eq, PartialEq)]
-pub struct PositionBuffer {
-    buffer: Utf8Buffer,
+pub struct PositionBuffer<B: Buffer> {
+    buffer: B,
     position: CursorPosition,
 }
 
